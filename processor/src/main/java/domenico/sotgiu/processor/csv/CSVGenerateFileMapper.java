@@ -26,7 +26,7 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
                     return;
                 }
                 //TODO find a better approach about mappings
-                if ("java.lang.String".equals(el.type())) {
+                if ("java.lang.String".equals(el.type())||"()java.lang.String".equals(el.type())) {
                     builder.addStatement("row[$L] =$L.apply(e.$L())", i,
                             ClassName.get(CSVEscapeCharacters.class), el.field());
 

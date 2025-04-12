@@ -16,12 +16,12 @@ import domenico.sotgiu.processor.util.TypeMapping;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import java.util.Set;
 
-import static javax.lang.model.element.ElementKind.CLASS;
-import static javax.lang.model.element.ElementKind.RECORD;
+import static javax.lang.model.element.ElementKind.*;
 
 
 @SupportedAnnotationTypes({"domenico.sotgiu.annotations.FileHeader"})
@@ -33,15 +33,15 @@ public class GenerateFileProcessor extends AbstractProcessor {
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
     }
-
+    private final static Set<ElementKind> kinds = Set.of(RECORD, CLASS, INTERFACE);
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
         for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(FileHeader.class)) {
 
-            if (annotatedElement.getKind() != RECORD && annotatedElement.getKind() != CLASS) {
+            if (!kinds.contains(annotatedElement.getKind())) {
                 getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        String.format("Only records can be annotated with @%s",
+                        String.format("Only records  or classes can be annotated with @%s",
                                 FileHeader.class.getSimpleName()), annotatedElement);
                 return true;
             }
