@@ -16,7 +16,7 @@ public class Main {
             try(var s = Files.lines(f)){
                 s.forEach(System.out::println);
             }
-            f.toFile().delete();
+           f.toFile().delete();
 
         } catch (IOException e) {
             throw new RuntimeException(e);

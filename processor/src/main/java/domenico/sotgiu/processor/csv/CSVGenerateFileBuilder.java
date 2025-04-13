@@ -1,6 +1,7 @@
 package domenico.sotgiu.processor.csv;
 
 import com.palantir.javapoet.*;
+import domenico.sotgiu.annotations.FileHeader;
 import domenico.sotgiu.core.FileBuilder;
 import domenico.sotgiu.core.FileMapper;
 import domenico.sotgiu.core.util.CSVEscapeCharacters;
@@ -11,6 +12,7 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CSVGenerateFileBuilder extends GenerateFile<String[]> {
     public CSVGenerateFileBuilder(Element annotatedElement) {
@@ -31,7 +33,7 @@ public class CSVGenerateFileBuilder extends GenerateFile<String[]> {
     public TypeSpec generate(String[] headers) {
 
         var annotatedElementTypeName = TypeName.get(annotatedElement.asType());
-
+        var separator = annotatedElement.getAnnotation(FileHeader.class).separator();
         var buildMethod = MethodSpec.methodBuilder("build")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC).returns(void.class)
@@ -39,7 +41,13 @@ public class CSVGenerateFileBuilder extends GenerateFile<String[]> {
                 .addParameter(getSupplierParameter(annotatedElementTypeName))
                 .addParameter(ParameterSpec.builder(ParameterizedTypeName.get(Map.class, String.class, String.class), "headersData").build())
                 .addException(IOException.class)
-                .addStatement("build(HEADERS, mapper, path, supplier, headersData)")
+                .addStatement("""
+                        var escape = $2T.of($4S);
+                        var escapedHeaders = $1T.stream(HEADERS)
+                                            .map(mapperFunction.apply(headersData))
+                                            .map(escape)
+                                            .collect($3T.joining($4S))""",Arrays.class,CSVEscapeCharacters.class, Collectors.class, separator)
+                .addStatement("build(escapedHeaders, mapper, path, supplier)")
                 .build();
 
         MethodSpec constructor = MethodSpec.constructorBuilder()
@@ -48,14 +56,14 @@ public class CSVGenerateFileBuilder extends GenerateFile<String[]> {
                         annotatedElementTypeName), "mapper").addModifiers(Modifier.FINAL).build())
                 .addStatement("this.$N = $N", "mapper", "mapper")
                 .build();
-
+        var escape= CSVEscapeCharacters.of(separator);
         return TypeSpec.classBuilder(annotatedElement.getSimpleName() + "FileBuilder").superclass(
                         ParameterizedTypeName.get(ClassName.get(FileBuilder.class), annotatedElementTypeName))
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addField(FieldSpec.builder(String[].class, "HEADERS")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
                         .initializer("$L", "new String[]{\"" + String.join("\",\"", Arrays.stream(headers)
-                                .map(CSVEscapeCharacters::apply).toArray(String[]::new)) + "\"}")
+                                .map(escape).toArray(String[]::new)) + "\"}")
                         .build())
                 .addField(FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(FileMapper.class), annotatedElementTypeName), "mapper")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build())

@@ -1,6 +1,7 @@
 package domenico.sotgiu.processor.csv;
 
 import com.palantir.javapoet.*;
+import domenico.sotgiu.annotations.FileHeader;
 import domenico.sotgiu.core.FileMapper;
 import domenico.sotgiu.core.util.CSVEscapeCharacters;
 import domenico.sotgiu.processor.util.GenerateFile;
@@ -19,22 +20,25 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
         super(annotatedElement);
     }
 
-    private static final Function<MethodSpec.Builder, Function<TypeMapping[], IntConsumer>> buildMethod =
+    private final Function<MethodSpec.Builder, Function<TypeMapping[], IntConsumer>> buildMethod =
             builder -> head -> i -> {
+                var separator = annotatedElement.getAnnotation(FileHeader.class).separator();
+
+
                 var el = head[i];
                 if (el == null) {
                     return;
                 }
                 //TODO find a better approach about mappings
                 if ("java.lang.String".equals(el.type())||"()java.lang.String".equals(el.type())) {
-                    builder.addStatement("row[$L] =$L.apply(e.$L())", i,
-                            ClassName.get(CSVEscapeCharacters.class), el.field());
+                    builder.addStatement("row[$L] = $L.of($S).apply(e.$L())", i,
+                            ClassName.get(CSVEscapeCharacters.class), separator, el.field());
 
                 } else if ("java.lang.Integer".equals(head[i].type())) {
                     builder.addStatement("row[$L] =\"\" + e.$L()", i, head[i].field());
                 } else {
-                    builder.addStatement("row[$L] =$L.apply(e.$L().toString())", i,
-                            ClassName.get(CSVEscapeCharacters.class), head[i].field());
+                    builder.addStatement("row[$L] = $L.of($S).apply(e.$L().toString())", i,
+                            ClassName.get(CSVEscapeCharacters.class), separator, head[i].field());
                 }
             };
 
@@ -42,6 +46,7 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
     public TypeSpec generate(TypeMapping[] fields) {
 
         var fileMapperClassName = annotatedElement.getSimpleName() + "FileMapper";
+        var separator = annotatedElement.getAnnotation(FileHeader.class).separator();
 
         var annotatedElementTypeName = TypeName.get(annotatedElement.asType());
         var applyMethodBuilder = MethodSpec.methodBuilder("apply")
@@ -54,7 +59,7 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
 
         IntStream.range(0, fields.length).filter(e -> fields[e] != null).forEach(consumer);
 
-        var applyMethod = applyMethodBuilder.addStatement("return String.join(\",\", row)")
+        var applyMethod = applyMethodBuilder.addStatement("return String.join($S, row)", separator)
                 .build();
 
         return TypeSpec.classBuilder(fileMapperClassName).

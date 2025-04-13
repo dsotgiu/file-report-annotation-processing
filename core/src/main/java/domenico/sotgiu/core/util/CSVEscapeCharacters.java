@@ -1,9 +1,13 @@
 package domenico.sotgiu.core.util;
 
-public final class CSVEscapeCharacters  {
+import java.util.function.UnaryOperator;
 
-    public static String apply(String input) {
-        if (input == null) {
+
+public interface CSVEscapeCharacters  extends UnaryOperator<String> {
+
+    static UnaryOperator<String> of(String separator) {
+       return input->{
+           if (input == null) {
             return "";
         }
 
@@ -11,11 +15,12 @@ public final class CSVEscapeCharacters  {
 
         if (escaped.contains(",") ||
                 escaped.contains(";")||
+                escaped.contains(separator) ||
                 escaped.contains("\n") ||
                 escaped.contains("\"")) {
             return "\"" + escaped + "\"";
         }
 
         return escaped;
-    }
+    };}
 }
