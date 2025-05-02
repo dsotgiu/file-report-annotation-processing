@@ -1,7 +1,7 @@
-package domenico.sotgiu;
+package domenico.sotgiu.example;
 
-import domenico.sotgiu.annotations.FileColumn;
-import domenico.sotgiu.annotations.FileHeader;
+import domenico.sotgiu.annotation.FileColumn;
+import domenico.sotgiu.annotation.FileHeader;
 
 @FileHeader({"test", "dt"})
 public class ClassTest {

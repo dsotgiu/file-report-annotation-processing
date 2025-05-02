@@ -1,4 +1,4 @@
-package domenico.sotgiu.annotations;
+package domenico.sotgiu.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

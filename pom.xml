@@ -7,9 +7,10 @@
     <packaging>pom</packaging>
     <name>my-app</name>
     <modules>
-        <module>core</module>
+        <module>annotation</module>
         <module>processor</module>
-        <module>reports</module>
+        <module>example</module>
+        <module>runtime</module>
     </modules>
 
 

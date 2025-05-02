@@ -19,7 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>domenico.sotgiu</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>annotation</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>domenico.sotgiu</groupId>
+            <artifactId>runtime</artifactId>
             <version>0.1</version>
         </dependency>
         <!-- Auto service annotation processor -->

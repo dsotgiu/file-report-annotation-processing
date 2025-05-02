@@ -1,6 +1,6 @@
 package domenico.sotgiu.processor.classmapping;
 
-import domenico.sotgiu.annotations.FileColumn;
+import domenico.sotgiu.annotation.FileColumn;
 import domenico.sotgiu.processor.util.Filter;
 
 import javax.lang.model.element.Element;

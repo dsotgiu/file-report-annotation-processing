@@ -1,6 +1,6 @@
 package domenico.sotgiu.processor.util;
 
-import domenico.sotgiu.annotations.FileColumn;
+import domenico.sotgiu.annotation.FileColumn;
 
 import javax.lang.model.element.Element;
 import java.util.Objects;

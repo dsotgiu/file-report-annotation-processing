@@ -1,6 +1,6 @@
-package domenico.sotgiu.core;
+package domenico.sotgiu.runtime;
 
-import domenico.sotgiu.core.util.ReplacePlaceholders;
+import domenico.sotgiu.runtime.util.ReplacePlaceholders;
 
 import java.io.IOException;
 import java.nio.file.Files;

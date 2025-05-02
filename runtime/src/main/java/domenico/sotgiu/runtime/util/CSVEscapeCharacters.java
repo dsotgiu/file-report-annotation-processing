@@ -1,4 +1,4 @@
-package domenico.sotgiu.core.util;
+package domenico.sotgiu.runtime.util;
 
 import java.util.function.UnaryOperator;
 

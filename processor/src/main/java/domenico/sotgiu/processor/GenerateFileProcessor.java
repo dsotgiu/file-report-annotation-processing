@@ -1,7 +1,7 @@
 package domenico.sotgiu.processor;
 
 import com.google.auto.service.AutoService;
-import domenico.sotgiu.annotations.FileHeader;
+import domenico.sotgiu.annotation.FileHeader;
 import domenico.sotgiu.processor.classmapping.ClassFieldNameMapper;
 import domenico.sotgiu.processor.classmapping.ClassFilter;
 import domenico.sotgiu.processor.csv.CSVGenerateFileBuilder;
@@ -24,7 +24,7 @@ import java.util.Set;
 import static javax.lang.model.element.ElementKind.*;
 
 
-@SupportedAnnotationTypes({"domenico.sotgiu.annotations.FileHeader"})
+@SupportedAnnotationTypes({"domenico.sotgiu.annotation.FileHeader"})
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 @AutoService(Processor.class)
 public class GenerateFileProcessor extends AbstractProcessor {

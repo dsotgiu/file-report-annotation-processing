@@ -1,10 +1,10 @@
 package domenico.sotgiu.processor.csv;
 
 import com.palantir.javapoet.*;
-import domenico.sotgiu.annotations.FileHeader;
-import domenico.sotgiu.core.FileBuilder;
-import domenico.sotgiu.core.FileMapper;
-import domenico.sotgiu.core.util.CSVEscapeCharacters;
+import domenico.sotgiu.annotation.FileHeader;
+import domenico.sotgiu.runtime.FileBuilder;
+import domenico.sotgiu.runtime.FileMapper;
+import domenico.sotgiu.runtime.util.CSVEscapeCharacters;
 import domenico.sotgiu.processor.util.GenerateFile;
 
 import javax.lang.model.element.Element;

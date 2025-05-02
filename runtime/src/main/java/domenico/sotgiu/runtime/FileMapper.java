@@ -1,4 +1,4 @@
-package domenico.sotgiu.core;
+package domenico.sotgiu.runtime;
 
 import java.util.function.Function;
 

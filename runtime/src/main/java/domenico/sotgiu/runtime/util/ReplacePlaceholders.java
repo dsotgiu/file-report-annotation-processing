@@ -1,4 +1,4 @@
-package domenico.sotgiu.core.util;
+package domenico.sotgiu.runtime.util;
 
 import java.util.Map;
 import java.util.regex.Matcher;
