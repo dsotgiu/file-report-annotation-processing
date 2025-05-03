@@ -20,7 +20,7 @@ public interface ClassFilter extends Filter {
             }
             var column = e.getAnnotation(FileColumn.class);
             if (Objects.isNull(column)) {
-                return headersSet.contains(val);
+                return headersSet.contains(val) || headersSet.contains(e.getSimpleName().toString());
             }
 
             var fieldColumn = column.value();
