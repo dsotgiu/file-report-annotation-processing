@@ -45,7 +45,7 @@ public class GenerateFileProcessor extends AbstractProcessor {
                                 FileHeader.class.getSimpleName()), annotatedElement);
                 return true;
             }
-            FileHeader head = annotatedElement.getAnnotation(FileHeader.class);
+            var head = annotatedElement.getAnnotation(FileHeader.class);
             var headers = head.value();
 
             var fieldsMapper = annotatedElement.getKind() == RECORD ?
@@ -68,7 +68,7 @@ public class GenerateFileProcessor extends AbstractProcessor {
     private void buildFiles(Element annotatedElement, GenerateFileBuilder generateFileBuilder, TypeMapping[]
             mapperFields, String[] headers) {
 
-        FileBuilder builder = FileBuilder.of(processingEnv.getFiler(),
+        var builder = FileBuilder.of(processingEnv.getFiler(),
                 processingEnv.getElementUtils().getPackageOf(annotatedElement).getQualifiedName().toString());
         builder.accept(generateFileBuilder.mapper().generate(mapperFields), annotatedElement.getSimpleName() + "FileMapper");
         builder.accept(generateFileBuilder.builder().generate(headers), annotatedElement.getSimpleName() + "FileBuilder");

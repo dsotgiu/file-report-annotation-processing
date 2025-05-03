@@ -10,6 +10,7 @@ import domenico.sotgiu.processor.util.TypeMapping;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
@@ -21,26 +22,8 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
     }
 
     private final Function<MethodSpec.Builder, Function<TypeMapping[], IntConsumer>> buildMethod =
-            builder -> head -> i -> {
-                var separator = annotatedElement.getAnnotation(FileHeader.class).separator();
-
-
-                var el = head[i];
-                if (el == null) {
-                    return;
-                }
-                //TODO find a better approach about mappings
-                if ("java.lang.String".equals(el.type())||"()java.lang.String".equals(el.type())) {
-                    builder.addStatement("row[$L] = $L.of($S).apply(e.$L())", i,
-                            ClassName.get(CSVEscapeCharacters.class), separator, el.field());
-
-                } else if ("java.lang.Integer".equals(head[i].type())) {
-                    builder.addStatement("row[$L] =\"\" + e.$L()", i, head[i].field());
-                } else {
-                    builder.addStatement("row[$L] = $L.of($S).apply(e.$L().toString())", i,
-                            ClassName.get(CSVEscapeCharacters.class), separator, head[i].field());
-                }
-            };
+            builder -> head -> i -> Optional.of(head[i]).ifPresent(el->
+                    builder.addStatement("row[$L] = ESCAPE_CHARACTERS.apply(e.$L())", i, el.field()));
 
 
     public TypeSpec generate(TypeMapping[] fields) {
@@ -56,7 +39,6 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
                 .addStatement("var row = ROW.clone()");
 
         var consumer = buildMethod.apply(applyMethodBuilder).apply(fields);
-
         IntStream.range(0, fields.length).filter(e -> fields[e] != null).forEach(consumer);
 
         var applyMethod = applyMethodBuilder.addStatement("return String.join($S, row)", separator)
@@ -67,10 +49,13 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addField(FieldSpec.builder(String[].class, "ROW")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC).build())
+                .addField(FieldSpec.builder(CSVEscapeCharacters.class, "ESCAPE_CHARACTERS")
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC).build())
                 .addMethod(applyMethod)
                 .addStaticBlock(CodeBlock.of("""
                         ROW = new String[$L];
-                        $T.fill(ROW, "");""", fields.length, Arrays.class))
+                        $T.fill(ROW, "");
+                        ESCAPE_CHARACTERS = $L.of($S);""", fields.length, Arrays.class, ClassName.get(CSVEscapeCharacters.class), separator))
                 .build();
     }
 

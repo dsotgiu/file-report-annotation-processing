@@ -1,16 +1,17 @@
 package domenico.sotgiu.runtime.util;
 
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 
-public interface CSVEscapeCharacters  extends UnaryOperator<String> {
+public interface CSVEscapeCharacters  extends Function<Object, String> {
 
-    static UnaryOperator<String> of(String separator) {
-       return input->{
-           if (input == null) {
+    static CSVEscapeCharacters of(String separator) {
+       return i->{
+           if (i == null) {
             return "";
         }
 
+        var input = String.valueOf(i);
         String escaped = input.replace("\"", "\"\"");
 
         if (escaped.contains(",") ||
