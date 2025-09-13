@@ -2,8 +2,8 @@ package domenico.sotgiu.processor.csv;
 
 import com.palantir.javapoet.*;
 import domenico.sotgiu.annotation.FileHeader;
-import domenico.sotgiu.runtime.CSVBuilder;
-import domenico.sotgiu.runtime.CSVMapper;
+import domenico.sotgiu.runtime.csv.CSVBuilder;
+import domenico.sotgiu.runtime.csv.CSVMapper;
 import domenico.sotgiu.runtime.util.CSVEscapeCharacters;
 import domenico.sotgiu.processor.util.GenerateFile;
 import domenico.sotgiu.runtime.util.ReplacePlaceholders;
@@ -48,7 +48,7 @@ public class CSVGenerateFileBuilder extends GenerateFile<String[]> {
                         var escapedHeaders = $3T.stream(HEADERS)
                                             .map(r).map(e).collect($4T.joining($5S))""",
                         CSVEscapeCharacters.class, ReplacePlaceholders.class, Arrays.class, Collectors.class, separator)
-                .addStatement("build(escapedHeaders, mapper, path, supplier)")
+                .addStatement("write(escapedHeaders, mapper, path, supplier)")
                 .build();
 
         MethodSpec constructor = MethodSpec.constructorBuilder()

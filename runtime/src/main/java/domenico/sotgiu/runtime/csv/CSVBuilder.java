@@ -1,4 +1,4 @@
-package domenico.sotgiu.runtime;
+package domenico.sotgiu.runtime.csv;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 public abstract class CSVBuilder<T> {
 
-    protected void build(String escapedHeaders, CSVMapper<T> mapper,
+    protected void write(String escapedHeaders, CSVMapper<T> mapper,
                          Path path, Supplier<Stream<T>> supplier
                          ) throws IOException {
 

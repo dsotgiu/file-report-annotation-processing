@@ -1,4 +1,4 @@
-package domenico.sotgiu.runtime;
+package domenico.sotgiu.runtime.csv;
 
 import java.util.function.Function;
 

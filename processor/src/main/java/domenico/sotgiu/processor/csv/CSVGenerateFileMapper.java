@@ -2,7 +2,7 @@ package domenico.sotgiu.processor.csv;
 
 import com.palantir.javapoet.*;
 import domenico.sotgiu.annotation.FileHeader;
-import domenico.sotgiu.runtime.CSVMapper;
+import domenico.sotgiu.runtime.csv.CSVMapper;
 import domenico.sotgiu.runtime.util.CSVEscapeCharacters;
 import domenico.sotgiu.processor.util.GenerateFile;
 import domenico.sotgiu.processor.util.TypeMapping;
