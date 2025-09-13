@@ -43,7 +43,7 @@ public class CSVGenerateFileBuilder extends GenerateFile<String[]> {
                 .addParameter(ParameterSpec.builder(ParameterizedTypeName.get(Map.class, String.class, String.class), "headersData").build())
                 .addException(IOException.class)
                 .addStatement("""
-                        var e = $1T.of($4S);
+                        var e = $1T.of($5S);
                         var r = $2T.of(headersData);
                         var escapedHeaders = $3T.stream(HEADERS)
                                             .map(r).map(e).collect($4T.joining($5S))""",
