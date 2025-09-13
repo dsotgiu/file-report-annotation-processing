@@ -70,8 +70,8 @@ public class GenerateFileProcessor extends AbstractProcessor {
 
         var builder = FileBuilder.of(processingEnv.getFiler(),
                 processingEnv.getElementUtils().getPackageOf(annotatedElement).getQualifiedName().toString());
-        builder.accept(generateFileBuilder.mapper().generate(mapperFields), annotatedElement.getSimpleName() + "FileMapper");
-        builder.accept(generateFileBuilder.builder().generate(headers), annotatedElement.getSimpleName() + "FileBuilder");
+        builder.accept(generateFileBuilder.mapper().generate(mapperFields), annotatedElement.getSimpleName() + "CSVMapper");
+        builder.accept(generateFileBuilder.builder().generate(headers), annotatedElement.getSimpleName() + "CSVBuilder");
 
     }
 

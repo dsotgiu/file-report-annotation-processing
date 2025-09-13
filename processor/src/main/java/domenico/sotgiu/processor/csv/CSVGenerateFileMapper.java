@@ -2,7 +2,7 @@ package domenico.sotgiu.processor.csv;
 
 import com.palantir.javapoet.*;
 import domenico.sotgiu.annotation.FileHeader;
-import domenico.sotgiu.runtime.FileMapper;
+import domenico.sotgiu.runtime.CSVMapper;
 import domenico.sotgiu.runtime.util.CSVEscapeCharacters;
 import domenico.sotgiu.processor.util.GenerateFile;
 import domenico.sotgiu.processor.util.TypeMapping;
@@ -28,7 +28,7 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
 
     public TypeSpec generate(TypeMapping[] fields) {
 
-        var fileMapperClassName = annotatedElement.getSimpleName() + "FileMapper";
+        var fileMapperClassName = annotatedElement.getSimpleName() + "CSVMapper";
         var separator = annotatedElement.getAnnotation(FileHeader.class).separator();
 
         var annotatedElementTypeName = TypeName.get(annotatedElement.asType());
@@ -45,7 +45,7 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
                 .build();
 
         return TypeSpec.classBuilder(fileMapperClassName).
-                addSuperinterface(ParameterizedTypeName.get(ClassName.get(FileMapper.class), annotatedElementTypeName))
+                addSuperinterface(ParameterizedTypeName.get(ClassName.get(CSVMapper.class), annotatedElementTypeName))
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addField(FieldSpec.builder(String[].class, "ROW")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC).build())

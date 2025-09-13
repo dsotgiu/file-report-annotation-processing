@@ -1,31 +1,23 @@
 package domenico.sotgiu.runtime;
 
-import domenico.sotgiu.runtime.util.ReplacePlaceholders;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public abstract class FileBuilder<T> {
+public abstract class CSVBuilder<T> {
 
-    protected Function<Map<String, String>, Function<String, String>>
-            mapperFunction = e -> s -> ReplacePlaceholders.apply(s, e);
-
-    protected void build(String escapedHeaders, FileMapper<T> mapper,
+    protected void build(String escapedHeaders, CSVMapper<T> mapper,
                          Path path, Supplier<Stream<T>> supplier
                          ) throws IOException {
 
         try (var writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-
-
             writer.write(escapedHeaders);
-
             try (var stream = supplier.get()) {
+
                 stream.map(mapper).forEach(e -> {
                     try {
                         writer.newLine();

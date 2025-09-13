@@ -12,16 +12,14 @@ public class Main {
         Supplier<Stream<RecordTest>> supplier = ()-> Stream.of(new RecordTest("0\"",10,new ClassTest("EEE")));
         try {
             var f = Files.createFile(Path.of("example/src/main/resources/file.csv"));
-            new domenico.sotgiu.example.RecordTestFileBuilder(new domenico.sotgiu.example.RecordTestFileMapper()).build(f, supplier, Map.of("t","pr,ova"));
+            new domenico.sotgiu.example.RecordTestCSVBuilder(new domenico.sotgiu.example.RecordTestCSVMapper()).build(f, supplier, Map.of("t","pr,ova"));
             try(var s = Files.lines(f)){
                 s.forEach(System.out::println);
             }
-           f.toFile().delete();
 
+            Files.delete(f);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        //System.out.println("Hello, World!");
     }
 }

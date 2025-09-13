@@ -1,13 +1,14 @@
 package domenico.sotgiu.runtime.util;
 
 import java.util.Map;
+import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class ReplacePlaceholders {
-    private final static Pattern pattern = Pattern.compile("\\$\\{([^}]+)}");
-
-    public static String apply(String input, Map<String, String> replacements) {
+public  interface ReplacePlaceholders extends UnaryOperator<String> {
+    Pattern pattern = Pattern.compile("\\$\\{([^}]+)}");
+    static ReplacePlaceholders of(Map<String, String> replacements) {
+        return input -> {
         // Regular expression for matching patterns like ${DATA}
         // Compile the regex pattern
         Matcher matcher = pattern.matcher(input);
@@ -37,5 +38,6 @@ public final class ReplacePlaceholders {
         result.append(input, lastEnd, input.length());
 
         return result.toString();
+    };
     }
 }
