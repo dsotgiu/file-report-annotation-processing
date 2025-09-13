@@ -43,10 +43,10 @@ public class CSVGenerateFileBuilder extends GenerateFile<String[]> {
                 .addParameter(ParameterSpec.builder(ParameterizedTypeName.get(Map.class, String.class, String.class), "headersData").build())
                 .addException(IOException.class)
                 .addStatement("""
-                        var e = $1T.of($5S);
-                        var r = $2T.of(headersData);
+                        var separator = $1T.of($5S);
+                        var replacePlaceholders = $2T.of(headersData);
                         var escapedHeaders = $3T.stream(HEADERS)
-                                            .map(r).map(e).collect($4T.joining($5S))""",
+                                            .map(replacePlaceholders).map(separator).collect($4T.joining($5S))""",
                         CSVEscapeCharacters.class, ReplacePlaceholders.class, Arrays.class, Collectors.class, separator)
                 .addStatement("write(escapedHeaders, mapper, path, supplier)")
                 .build();
