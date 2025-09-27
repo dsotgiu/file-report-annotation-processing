@@ -5,6 +5,6 @@ import domenico.sotgiu.annotation.FileHeader;
 
 @FileHeader("test")
 public interface InterfaceTest {
-    @FileColumn("test")
+    @FileColumn(value = "test", format = "this.substring(0,2)")
     String getTest();
 }

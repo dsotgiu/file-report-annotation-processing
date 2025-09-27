@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args)  {
-        Supplier<Stream<RecordTest>> supplier = ()-> Stream.of(new RecordTest("0\"",10,new ClassTest("EEE")));
+        Supplier<Stream<RecordTest>> supplier = ()-> Stream.of(new RecordTest("0\"",10,new ClassTest("EEE",1)));
         try {
             var f = Files.createFile(Path.of("example/src/main/resources/file.csv"));
             new domenico.sotgiu.example.RecordTestCSVBuilder(new domenico.sotgiu.example.RecordTestCSVMapper()).build(f, supplier, Map.of("t","pr,ova"));

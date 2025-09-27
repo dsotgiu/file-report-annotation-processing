@@ -3,26 +3,44 @@ package domenico.sotgiu.example;
 import domenico.sotgiu.annotation.FileColumn;
 import domenico.sotgiu.annotation.FileHeader;
 
-@FileHeader({"test", "dt"})
-public class ClassTest {
-    @FileColumn("test")
-    private final static String data = "data";
-    private String dt;
+import java.util.Optional;
 
-    public String getData() {
-        return data;
+
+@FileHeader({"test", "dt", "dti", "nullElem"})
+public class ClassTest {
+    private final String dt;
+
+    private final int dti;
+    @FileColumn(value = "test",format = "this.substring(0,2)")
+    public  String data() {
+        return "test" + Optional.ofNullable(this.dt).orElse("test");
     }
+
+    public  Integer data1() {
+        return 1;
+    }
+    @FileColumn(value = "nullElem",defaultMethod = "data1")
+    public Integer nullElement;
 
     public String getDt() {
+
         return dt;
     }
+    public int getDti() {
+        return dti;
+    }
 
-    public ClassTest(String dt) {
+    public Integer getNullElement() {
+        return nullElement;
+    }
+
+    public ClassTest(String dt, int dti) {
         this.dt = dt;
+        this.dti = dti;
     }
 
     @Override
     public String toString() {
-        return data + dt;
+        return data() + dt;
     }
 }
