@@ -23,7 +23,7 @@ public class CSVGenerateFileMapper extends GenerateFile<TypeMapping[]> {
 
     private final Function<MethodSpec.Builder, Function<TypeMapping[], IntConsumer>> buildMethod =
             builder -> head -> i -> Optional.of(head[i]).ifPresent(el->
-                    builder.addStatement("row[$L] = ESCAPE_CHARACTERS.apply(e.$L())", i, el.field()));
+                    builder.addStatement("row[$L] = ESCAPE_CHARACTERS.apply($L)", i, el.field()));
 
 
     public TypeSpec generate(TypeMapping[] fields) {

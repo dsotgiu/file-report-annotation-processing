@@ -12,13 +12,15 @@ import java.util.stream.Collectors;
 public interface AnnotatedElements extends Supplier<Set<String>> {
 
     static AnnotatedElements of(Element annotatedElement) {
+        var mapper = ClassFieldNameMapper.of();
         return () -> annotatedElement.getEnclosedElements().stream().filter(e -> {
-            if (!ElementKind.METHOD.equals(e.getKind())) {
+            if (!(ElementKind.METHOD.equals(e.getKind())||
+                    ElementKind.FIELD.equals(e.getKind()))) {
                 return false;
             }
             var column = e.getAnnotation(FileColumn.class);
-            return !Objects.isNull(column) || e.getSimpleName().toString().startsWith("get");
-        }).map(Element::getSimpleName).map(Objects::toString).collect(Collectors.toSet());
+            return Objects.nonNull(column) || e.getSimpleName().toString().startsWith("get");
+        }).map(mapper).map(Objects::toString).collect(Collectors.toSet());
     }
 
 }

@@ -10,4 +10,5 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 @Retention(CLASS)
 public @interface FileColumn {
     String value();
+    String format() default "this";
 }

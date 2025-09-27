@@ -11,7 +11,7 @@ public interface RecordFilter extends Filter {
     static RecordFilter of(String[] headers) {
         Set<String> headersSet = setOf.apply(headers);
         return e -> {
-            if (!ElementKind.FIELD.equals(e.getKind())) {
+            if (!(ElementKind.FIELD.equals(e.getKind())||ElementKind.METHOD.equals(e.getKind()))) {
                 return false;
             }
             var column = e.getAnnotation(FileColumn.class);

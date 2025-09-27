@@ -15,4 +15,16 @@ public record TypeMapping(String type, String header, String field) {
                         e.getAnnotation(FileColumn.class).value(),
                 fieldNameMapper.apply(e));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        TypeMapping that = (TypeMapping) o;
+        return Objects.equals(field, that.field) && Objects.equals(header, that.header);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(header, field);
+    }
 }
