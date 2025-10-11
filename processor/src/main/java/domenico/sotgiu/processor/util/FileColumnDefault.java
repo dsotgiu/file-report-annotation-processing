@@ -10,7 +10,7 @@ public interface FileColumnDefault extends Supplier<String> {
         return () -> annotation.flatMap(an ->
                 Optional.of(an.defaultMethod()))
                 .filter(df -> !df.isBlank())
-                .map(df -> "java.util.Optional.ofNullable(this).orElse(e." + df + "())")
+                .map(df -> "ofNullable(this).orElse(e." + df + "())")
                 .orElse("this");
     }
 
