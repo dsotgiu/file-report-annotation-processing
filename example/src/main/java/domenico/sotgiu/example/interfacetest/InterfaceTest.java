@@ -1,4 +1,4 @@
-package domenico.sotgiu.example;
+package domenico.sotgiu.example.interfacetest;
 
 import domenico.sotgiu.annotation.FileColumn;
 import domenico.sotgiu.annotation.FileHeader;

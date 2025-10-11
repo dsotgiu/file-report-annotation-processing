@@ -1,12 +1,17 @@
-package domenico.sotgiu.example;
+package domenico.sotgiu.example.classtest;
 
 import domenico.sotgiu.annotation.FileColumn;
 import domenico.sotgiu.annotation.FileHeader;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.Optional;
 
 
-@FileHeader({"test", "dt", "dti", "nullElem"})
+@FileHeader({"test", "dt", "dti", "nullElem", "test1"})
 public class ClassTest {
     private final String dt;
 
@@ -22,6 +27,9 @@ public class ClassTest {
     @FileColumn(value = "nullElem",defaultMethod = "data1")
     public Integer nullElement;
 
+    @FileColumn(value = "test1", format = "method.formatBigDecimal(this)")
+    public BigDecimal test1;
+
     public String getDt() {
 
         return dt;
@@ -34,6 +42,10 @@ public class ClassTest {
         return nullElement;
     }
 
+    public BigDecimal getTest1() {
+        return test1;
+    }
+
     public ClassTest(String dt, int dti) {
         this.dt = dt;
         this.dti = dti;
@@ -42,5 +54,13 @@ public class ClassTest {
     @Override
     public String toString() {
         return data() + dt;
+    }
+
+
+    public String formatBigDecimal(BigDecimal e) {
+        var symbols = new DecimalFormatSymbols(Locale.ENGLISH);
+        var df = new DecimalFormat("#,##0.00", symbols);
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return df.format(e);
     }
 }
